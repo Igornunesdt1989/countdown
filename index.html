@@ -2,10 +2,9 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <title>Do colégio à vida: sete lembranças e reflexões</title>
+  <title>Lembranças sendo desbloqueadas em...</title>
   <link href="https://fonts.googleapis.com/css2?family=Simonetta:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
   <style>
-    /* Reset e estilo básico */
     body, html {
       margin: 0;
       padding: 0;
@@ -13,28 +12,20 @@
       height: 100%;
       overflow: hidden;
       font-family: 'Simonetta', serif;
-      background: linear-gradient(45deg, #C19A6B, #D2B48C, #FFA500, #FF8C00);
+      background: linear-gradient(45deg, #FFA07A, #FF8C00, #FFA500, #FFD700);
+      animation: backgroundTransition 10s infinite alternate;
     }
-    
-    /* Fundo glitch */
-    .glitch-background {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0.5;
-      z-index: -1;
+    @keyframes backgroundTransition {
+      0% { background: linear-gradient(45deg, #FFA07A, #FF8C00, #FFA500, #FFD700); }
+      100% { background: linear-gradient(45deg, #FFD700, #FFA500, #FF8C00, #FFA07A); }
     }
-
-    /* Contagem regressiva */
     .countdown {
       position: absolute;
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
       text-align: center;
-      color: #fff;
+      z-index: 3;
     }
     .countdown h1 {
       font-size: 3em;
@@ -44,28 +35,19 @@
     .timer {
       font-size: 2em;
       letter-spacing: 2px;
+      color: black;
     }
-
-    /* Animação de queda */
     .falling {
       position: absolute;
       font-size: 2em;
       opacity: 0.8;
-      animation: fall linear infinite;
+      animation: fall 5s linear forwards;
+      z-index: 2;
     }
-
     @keyframes fall {
-      0% {
-        transform: translateY(-10vh);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh);
-        opacity: 0;
-      }
+      0% { transform: translateY(-10vh); opacity: 1; }
+      100% { transform: translateY(100vh); opacity: 0; }
     }
-
-    /* Estilo do Instagram */
     .instagram {
       position: absolute;
       bottom: 20px;
@@ -73,79 +55,108 @@
       text-align: center;
       font-size: 1.2em;
       color: black;
+      z-index: 3;
     }
   </style>
 </head>
 <body>
-  <div class="glitch-background"></div>
-  
   <div class="countdown">
-    <h1>Do colégio à vida: sete lembranças e reflexões</h1>
+    <h1 id="title">Lembranças sendo desbloqueadas em...</h1>
     <div class="timer" id="timer"></div>
   </div>
-
   <div class="instagram">
     &#x1F4F7; @igornunesrbd
   </div>
-
   <script>
-    // Define a data alvo: 7 de julho de 2025 às 07:00:00
-    const targetDate = new Date("July 7, 2025 07:00:00").getTime();
+    // Para testar imediatamente, descomente as linhas abaixo:
+    // let firstTargetDate = new Date("January 1, 2020 00:00:00").getTime();
+    // let secondTargetDate = new Date("January 1, 2020 00:00:00").getTime();
 
-    // Atualiza a contagem a cada segundo
-    const interval = setInterval(function() {
+    // Use as datas originais se preferir:
+    let firstTargetDate = new Date("May 7, 2025 07:00:00").getTime();
+    let secondTargetDate = new Date("July 7, 2025 07:00:00").getTime();
+    let animationsStarted = false;
+
+    function updateCountdown() {
       const now = new Date().getTime();
-      const distance = targetDate - now;
-      
-      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-      
-      document.getElementById("timer").innerHTML = days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-      if (distance < 0) {
-        clearInterval(interval);
-        document.getElementById("timer").innerHTML = "Tempo esgotado!";
+      if(now < firstTargetDate) {
+        let distance = firstTargetDate - now;
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+        document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+      } else {
+        document.getElementById("title").innerHTML = "Do colégio à vida: sete lembranças e reflexões";
+        let distance = secondTargetDate - now;
+        if(distance > 0) {
+          const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          document.getElementById("timer").innerHTML = `${days}d ${hours}h ${minutes}m ${seconds}s`;
+        } else {
+          document.getElementById("timer").innerHTML = "";
+        }
+        if (!animationsStarted) {
+          startAnimations();
+          animationsStarted = true;
+        }
       }
-    }, 1000);
-
-    // Cria emojis caindo com o padrão alternado
-    function createFallingSevens() {
-      const positions = [10, 25, 40, 55, 70, 85, 95]; // 7 fileiras fixas
-      positions.forEach(pos => {
-        let seven = document.createElement("div");
-        seven.classList.add("falling");
-        seven.innerHTML = "7";
-        seven.style.left = pos + "vw";
-        seven.style.animationDuration = "5s";
-        document.body.appendChild(seven);
-        setTimeout(() => seven.remove(), 5000);
-      });
     }
 
-    function createFallingBooks() {
-      const positions = [10, 25, 40, 55, 70, 85, 95]; // 7 fileiras fixas
-      positions.forEach(pos => {
-        let book = document.createElement("div");
-        book.classList.add("falling");
-        book.innerHTML = "📚";
-        book.style.left = pos + "vw";
-        book.style.animationDuration = "5s";
-        document.body.appendChild(book);
-        setTimeout(() => book.remove(), 5000);
-      });
+    const interval = setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    function createFallingElement(content, pos) {
+      let element = document.createElement("div");
+      element.classList.add("falling");
+      element.innerHTML = content;
+      element.style.left = pos + "vw";
+      document.body.appendChild(element);
+      setTimeout(() => element.remove(), 5000);
     }
 
-    setInterval(() => {
-      createFallingSevens();
-      setTimeout(createFallingBooks, 7000); // Livros caem 7s depois dos 7s
-    }, 14000); // Padrão total de 14 segundos para repetir
+    function startCycle() {
+      // 1. Os números "7" caem simultaneamente em uma fileira:
+      const numberPositions = [5, 20, 35, 50, 65, 80, 95];
+      numberPositions.forEach(pos => {
+        createFallingElement("7", pos);
+      });
+
+      // 2. Após 5 segundos (quando os números terminam sua animação), iniciam as frases uma a uma:
+      setTimeout(() => {
+        const phrases = [
+          "Fiz tantas perguntas, mas tudo o que eu tive foi silêncio",
+          "Tome a sua cruz, e siga-me!",
+          "Quero seguir-te",
+          "Nos Braços Do Pai",
+          "Não posso mais viver para mim mesmo",
+          "Quando os sonhos se frustram",
+          "Esperança"
+        ];
+        phrases.forEach((phrase, index) => {
+          setTimeout(() => {
+            createFallingElement(phrase, 50);
+          }, index * 7000);
+        });
+      }, 5000);
+
+      // 3. Após as frases (7 x 7s = 49s), inicia os livros: 5s + 49s = 54s, os livros caem simultaneamente:
+      setTimeout(() => {
+        const bookPositions = [5, 20, 35, 50, 65, 80, 95];
+        bookPositions.forEach(pos => {
+          createFallingElement("📚", pos);
+        });
+      }, 54000);
+    }
+
+    function startAnimations() {
+      // Inicia o primeiro ciclo imediatamente
+      startCycle();
+      // Repete o ciclo a cada 60 segundos
+      setInterval(startCycle, 60000);
+    }
   </script>
 </body>
 </html>
-
-
-
-
-
